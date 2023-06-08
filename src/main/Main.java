@@ -1,8 +1,14 @@
-package scr.vendingmachine;
+package src.main;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+
+import src.main.vendingmachine.Beverage;
+import src.main.vendingmachine.Coffee;
+import src.main.vendingmachine.CoffeeType;
+import src.main.vendingmachine.Tea;
+import src.main.vendingmachine.TeaType;
 
 public class Main {
     public static void main(String[] args) {

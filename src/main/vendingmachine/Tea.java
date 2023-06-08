@@ -1,4 +1,4 @@
-package scr.vendingmachine;
+package src.main.vendingmachine;
 
 public class Tea extends Beverage {
     public static final TeaType BLACK_TEA = TeaType.BLACK_TEA;

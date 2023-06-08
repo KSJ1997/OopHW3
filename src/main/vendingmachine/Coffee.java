@@ -1,4 +1,4 @@
-package scr.vendingmachine;
+package src.main.vendingmachine;
 
 public class Coffee extends Beverage {
     private CoffeeType type;

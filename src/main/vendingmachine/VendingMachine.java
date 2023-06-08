@@ -1,4 +1,4 @@
-package scr.vendingmachine;
+package src.main.vendingmachine;
 
 import java.util.Collections;
 import java.util.List;

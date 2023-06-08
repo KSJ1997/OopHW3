@@ -1,4 +1,4 @@
-package scr.vendingmachine;
+package src.main.vendingmachine;
 
 public enum TeaType {
     BLACK_TEA("Черный чай"),

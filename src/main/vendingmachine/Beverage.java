@@ -1,4 +1,4 @@
-package scr.vendingmachine;
+package src.main.vendingmachine;
 
 public abstract class Beverage implements Comparable<Beverage> {
     protected String name;
