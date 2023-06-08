@@ -1,43 +1,86 @@
 package scr.vendingmachine;
-import java.util.Scanner;
+
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class Main {
     public static void main(String[] args) {
-        HotBeverageMachine machine = new HotBeverageMachine();
+        List<Beverage> menu = createMenu();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        HotBeverage tea = new Tea("Чай", 200, 70);
-        HotBeverage coffee = new Coffee("Кофе", 150, 80);
+        while (true) {
+            displayMenu(menu);
+            System.out.print("Введите номер напитка: ");
 
-        machine.addProduct(tea);
-        machine.addProduct(coffee);
+            try {
+                int choice = Integer.parseInt(reader.readLine());
 
-        Scanner scanner = new Scanner(System.in);
+                if (choice >= 1 && choice <= menu.size()) {
+                    Beverage selectedBeverage = menu.get(choice - 1);
+                    System.out.println("Вы выбрали: " + selectedBeverage);
 
-        System.out.println("Меню:");
-        System.out.println("1. Чай");
-        System.out.println("2. Кофе");
-        System.out.print("Выберите номер напитка: ");
-        int choice = scanner.nextInt();
+                    System.out.println("Напиток готовится...");
 
-        HotBeverage selectedProduct = null;
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-        switch (choice) {
-            case 1:
-                selectedProduct = machine.getProduct("Чай", 200, 70);
+                    System.out.println("Ваш напиток готов!");
+
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    System.out.println("Нажмите Enter, чтобы продолжить...");
+                    executorService.submit(() -> {
+                        try {
+                            reader.readLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).get(5, TimeUnit.SECONDS);
+
+                    executorService.shutdownNow();
+                } else {
+                    System.out.println("Неверный номер напитка. Пожалуйста, выберите снова.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                System.out.println("Неверный формат ввода. Пожалуйста, введите целое число.");
+            } catch (Exception e) {
+                System.out.println("Истекло время ожидания.");
+                executorService.shutdownNow();
                 break;
-            case 2:
-                selectedProduct = machine.getProduct("Кофе", 150, 80);
-                break;
-            default:
-                System.out.println("Неверный выбор.");
+            }
         }
+    }
 
-        if (selectedProduct != null) {
-            System.out.println("Получен продукт: " + selectedProduct.getName());
-        } else {
-            System.out.println("Продукт не найден.");
+    private static List<Beverage> createMenu() {
+        List<Beverage> menu = new ArrayList<>();
+
+        menu.add(new Tea(TeaType.BLACK_TEA));
+        menu.add(new Tea(TeaType.GREEN_TEA));
+
+        menu.add(new Coffee(CoffeeType.AMERICANO));
+        menu.add(new Coffee(CoffeeType.CAPPUCCINO));
+        menu.add(new Coffee(CoffeeType.LATTE));
+
+        return menu;
+    }
+
+    private static void displayMenu(List<Beverage> menu) {
+        System.out.println("Меню напитков:");
+        for (int i = 0; i < menu.size(); i++) {
+            Beverage beverage = menu.get(i);
+            System.out.println((i + 1) + ". " + beverage.getName() + " Цена: " + beverage.getPrice() + "р.");
         }
-
-        scanner.close();
+        System.out.println();
     }
 }
